@@ -1,2 +1,2 @@
-a=4
-print(a)
+def aafbau(z):
+  
