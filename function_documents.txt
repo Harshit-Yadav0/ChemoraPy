@@ -2,3 +2,9 @@ ______..-••||{Function Documentation}||••-.._______
 
 Here is list and explanation of all the function available in ChemoraPy.
 》》》HOPE YOU LIKE...........
+
+1.Aafbau function:-
+ >>>This function gives the electronic configration of an element.
+
+2.Shealding_const:-
+ >>>This function calculate the value of shealding constent if the last/outermost electron is       removed.
