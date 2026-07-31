@@ -26,97 +26,74 @@ def aafbau(Z):
     return configuration
 
 
-def shealding_constant(Z):
-    """Calculate the Slater shielding constant (sigma) for the outermost electron
+def shielding_constant(Z):
+    """
+    Calculates the Slater shielding constant (sigma) for the outermost electron
     of a neutral atom with atomic number Z using Slater's rules.
-
-    Returns the shielding constant sigma (float).
     """
     if Z <= 0:
         return 0.0
 
-    # Orbital order matches aafbau so we can build the subshell configuration
-    orbitals = [
-        ["1s", 2], ["2s", 2], ["2p", 6],
-        ["3s", 2], ["3p", 6], ["4s", 2],
-        ["3d", 10], ["4p", 6], ["5s", 2],
-        ["4d", 10], ["5p", 6], ["6s", 2],
-        ["4f", 14], ["5d", 10], ["6p", 6],
-        ["7s", 2], ["5f", 14], ["6d", 10],
-        ["7p", 6]
+    # 1. Standard Aufbau order to determine the electronic configuration
+    aufbau_orbitals = [
+        ("1s", 2), ("2s", 2), ("2p", 6), ("3s", 2), ("3p", 6), ("4s", 2),
+        ("3d", 10), ("4p", 6), ("5s", 2), ("4d", 10), ("5p", 6), ("6s", 2),
+        ("4f", 14), ("5d", 10), ("6p", 6), ("7s", 2), ("5f", 14), ("6d", 10), ("7p", 6)
     ]
 
-    # Build subshell filling without mutating the caller's Z
+    # Fill subshells based on Z
     remaining = Z
-    subshells = []
-    for orb, cap in orbitals:
+    subshells = [] # List of elements like ['1s', 2]
+    for orb, cap in aufbau_orbitals:
         if remaining <= 0:
             break
         e = min(remaining, cap)
-        subshells.append((orb, e))
+        subshells.append([orb, e])
         remaining -= e
 
-    # Outermost occupied subshell
+    # Identify the outermost subshell containing the target electron
     last_orb, last_electrons = subshells[-1]
+    n_val = int(last_orb[0])
+    l_val = last_orb[1]
 
-    # parse principal quantum number and orbital type (assumes format like '3p', '4f')
-    try:
-        n_val = int(last_orb[0])
-        l_val = last_orb[1]
-    except Exception:
-        return 0.0
+    # Deduct the target electron itself from the count
+    subshells[-1][1] -= 1
 
     sigma = 0.0
 
-    # Slater's rules:
-    # - For s/p valence electrons:
-    #     same shell: 0.35 each (0.30 for 1s other electron)
-    #     (n-1) shell: 0.85 each
-    #     lower shells: 1.00 each
-    # - For d/f valence electrons:
-    #     same shell: 0.35 each (exclude the electron itself)
-    #     lower shells: 1.00 each
-    if l_val in ("s", "p"):
-        same_shell_factor = 0.30 if n_val == 1 and l_val == "s" else 0.35
-        for orb, e in subshells:
-            n_i = int(orb[0])
+    # 2. Calculate shielding based on Slater's specific rules
+    for orb, e in subshells:
+        if e == 0:
+            continue
+        
+        n_i = int(orb[0])
+        l_i = orb[1]
+
+        # Case A: Outermost electron is in an s or p orbital
+        if l_val in ('s', 'p'):
             if n_i == n_val:
-                if orb == last_orb:
-                    sigma += (e - 1) * same_shell_factor
-                else:
-                    sigma += e * same_shell_factor
+                # Exception for 1s shell
+                same_shell_factor = 0.30 if n_val == 1 else 0.35
+                sigma += e * same_shell_factor
             elif n_i == n_val - 1:
                 sigma += e * 0.85
             elif n_i < n_val - 1:
                 sigma += e * 1.00
-    else:
-        # d or f valence electron
-        for orb, e in subshells:
-            n_i = int(orb[0])
-            if n_i == n_val:
-                if orb == last_orb:
-                    sigma += (e - 1) * 0.35
-                else:
-                    sigma += e * 0.35
-            elif n_i < n_val:
+
+        # Case B: Outermost electron is in a d or f orbital
+        elif l_val in ('d', 'f'):
+            if n_i == n_val and l_i == l_val:
+                sigma += e * 0.35
+            elif n_i < n_val or (n_i == n_val and l_i != l_val):
+                # All lower groups shield by 1.00
                 sigma += e * 1.00
 
-    return sigma
-    else:
-        # d or f valence electron: all electrons in shells lower than n_val
-        # contribute 1.00; electrons in the same shell contribute 0.35 (exclude the electron itself)
-        for orb, e in subshells:
-            n_i = int(orb[0])
-            if n_i == n_val:
-                if orb == last_orb:
-                    sigma += (e - 1) * 0.35
-                else:
-                    sigma += e * 0.35
-            elif n_i < n_val:
-                sigma += e * 1.00
+    return round(sigma, 4)
 
-    return sigma
-# the function of slaters rule is not working correctly
+# Example verification:
+# Carbon (Z=6): Configuration 1s2 2s2 2p2. Outermost (2p) has 3 other electrons in n=2, 2 in n=1.
+# Sigma = (3 * 0.35) + (2 * 0.85) = 1.05 + 1.70 = 2.75
+#print(f"Carbon (Z=6) Sigma: {shielding_constant(6)}") 
 
 
 def mole(n,g,m):
