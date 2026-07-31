@@ -130,3 +130,12 @@ def limitreact(m1,c1,m2,c2):
         result=[sa2,"2nd option"]
         return result
         #still working
+
+
+
+
+
+def Zeff(Z):
+    s=shielding_constant(Z)
+    result=Z-s
+    return result
