@@ -26,7 +26,7 @@ def aafbau(Z):
     return configuration
 
 
-def shealding_constant(z):
+def shealding_constant(z,e):
 
     shells = [
         ("1",2),("2",8),("3",18),
@@ -45,6 +45,14 @@ def shealding_constant(z):
 
         z-=electrons
 
-    return  shells_config
+    if z<e:
+        break
 
-        
+    else:
+        if e==z:
+            a=len(shells_config)
+            b=a-1
+            for i in range(b):
+                check=shell
+
+                #Not completed yet 
