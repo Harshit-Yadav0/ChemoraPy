@@ -24,3 +24,25 @@ def aafbau(Z):
         Z -= electrons
 
     return configuration
+
+
+def shealding_constant(z):
+
+    shells = [
+        ("1",2),("2",8),("3",10)
+        ("4",14),("5",14),("6"14)
+        ("7",8)
+    ]
+
+    shells_config=[]
+    for shells, capacity in shells:
+
+        if z<=0:
+            break
+
+        electrons = min(z, capacity)
+        shells.append((shells, electron))
+
+        z-=electron
+
+        
