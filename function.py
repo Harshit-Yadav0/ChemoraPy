@@ -109,7 +109,7 @@ def mole(n,g,m):
 
 def ntp(v):
     moles=v/22.4
-    return ntp
+    return moles
 
 def stp(v):
     moles=v/22.7
