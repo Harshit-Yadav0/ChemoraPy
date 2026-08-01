@@ -7,4 +7,36 @@ Here is list and explanation of all the function available in ChemoraPy.
  >>>This function gives the electronic configration of an element.
 
 2.Shealding_const:-
- >>>This function calculate the value of shealding constent if the last/outermost electron is       removed.
+ >>>This function calculate the value of shealding constent if the last/outermost electron is removed.
+3. Mole function:-
+ >>>This function calculates the number of moles given either:
+    - Number of particles (n) and Avogadro's number (Na = 6.022 × 10^23), OR
+    - Mass (g) and molar mass (m).
+
+4. NTP function:-
+ >>>This function calculates moles from volume at NTP (Normal Temperature and Pressure).
+    Uses molar volume of 22.4 L/mol at NTP.
+
+5. STP function:-
+ >>>This function calculates moles from volume at STP (Standard Temperature and Pressure).
+    Uses molar volume of 22.7 L/mol at STP.
+
+6. Density function:-
+ >>>This function calculates density as the ratio of mass (x) to volume (y).
+    Formula: density = mass / volume.
+
+7. Vepdens function:-
+ >>>This function calculates vapor density, which is half the molar mass (M).
+    Formula: vapor_density = molar_mass / 2.
+
+8. Limitreact function:-
+ >>>This function identifies the limiting reagent between two reactants.
+    Compares stoichiometric amounts (m1/c1 vs m2/c2) and returns the smaller value.
+
+9. Zeff function:-
+ >>>This function calculates the effective nuclear charge (Zeff) experienced by an electron.
+    Formula: Zeff = Z - σ (atomic number minus shielding constant).
+
+10. IEnthalpy function:-
+ >>>This function calculates the ionization enthalpy (energy required to remove an electron).
+    Uses the formula: H = 1312 × (Zeff² / n²), where n is the principal quantum number.
