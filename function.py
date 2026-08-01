@@ -139,3 +139,15 @@ def Zeff(Z):
     s=shielding_constant(Z)
     result=Z-s
     return result
+
+def IEnthalpy(Z):
+    Zef=Zeff(Z)
+    config=aafbau(Z)
+    last=len(config)-1
+    new=config[last]
+    x,e=new[0],int(new[1])
+    n,l=int(x[0]),x[1]
+    
+    H=1312*((Zef**2)/n**2)
+
+    return H
